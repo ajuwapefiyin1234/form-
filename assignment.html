@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!-- Declare HTML5 document type -->
+
+<html lang="en">
+<!-- Root HTML element with language set to English -->
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Character encoding for universal characters -->
+
+  <title>Assignment Submission</title>
+  <!-- Page title displayed in browser tab -->
+
+  <!-- Google Fonts link for handwriting style -->
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+
+  <style>
+    /* Body styling */
+    body {
+      font-family: 'Indie Flower', cursive; /* Handwriting font */
+      background: #fdf6e3; /* Light cream background color */
+      margin: 0; /* Remove default browser margin */
+      padding: 20px; /* Add some spacing around content */
+      display: flex; /* Use flexbox for layout */
+      flex-direction: column; /* Stack content vertically */
+      align-items: center; /* Center content horizontally */
+    }
+
+    /* Page titles styling */
+    h1, h2 {
+      text-align: center; /* Center align text */
+      color: #333; /* Dark text for readability */
+    }
+
+    /* Form styling */
+    form {
+      width: 100%; /* Full width of container */
+      max-width: 400px; /* Limit form width */
+      background: #fff9f0; /* Light box background */
+      padding: 20px; /* Inner spacing */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow */
+      transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+    }
+
+    /* Form hover effect */
+    form:hover {
+      transform: translateY(-4px); /* Lift the form slightly */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Darker shadow on hover */
+    }
+
+    /* Label styling */
+    label {
+      display: block; /* Make labels block-level */
+      margin-top: 10px; /* Space above label */
+      color: #555; /* Medium dark color */
+    }
+
+    /* Input and textarea styling */
+    input, textarea {
+      width: 100%; /* Full width */
+      padding: 10px; /* Inner spacing */
+      margin-top: 5px; /* Space below label */
+      border: 2px solid #eee; /* Light border */
+      border-radius: 8px; /* Rounded corners */
+      font-family: 'Indie Flower', cursive; /* Handwriting font for input text */
+      font-size: 16px; /* Readable font size */
+      transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Smooth hover/focus effects */
+    }
+
+    /* Focus effect for input fields */
+    input:focus, textarea:focus {
+      border-color: #f4a261; /* Orange border on focus */
+      box-shadow: 0 0 5px #f4a261; /* Soft glow */
+      outline: none; /* Remove default outline */
+    }
+
+    /* Submit button styling */
+    button {
+      margin-top: 15px; /* Space above button */
+      padding: 10px; /* Padding inside button */
+      width: 100%; /* Full width */
+      background: #f4a261; /* Orange background */
+      color: white; /* White text */
+      border: none; /* Remove border */
+      border-radius: 8px; /* Rounded corners */
+      font-family: 'Indie Flower', cursive; /* Handwriting font */
+      font-size: 18px; /* Larger text */
+      cursor: pointer; /* Pointer cursor on hover */
+      transition: background 0.2s ease; /* Smooth color change */
+    }
+
+    /* Button hover effect */
+    button:hover {
+      background: #e76f51; /* Darker orange on hover */
+    }
+
+    /* History section styling */
+    .history {
+      width: 100%; /* Full width */
+      max-width: 400px; /* Limit width */
+      margin-top: 20px; /* Space from form */
+      background: #fff9f0; /* Same light box background */
+      padding: 15px; /* Inner padding */
+      border-radius: 12px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Soft shadow */
+      transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover effect */
+    }
+
+    /* Hover effect for history box */
+    .history:hover {
+      transform: translateY(-4px); /* Lift effect */
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Darker shadow */
+    }
+
+    /* Each list item in history */
+    li {
+      margin-bottom: 10px; /* Space between entries */
+      border-bottom: 1px dashed #f4a261; /* Dashed separator */
+      padding-bottom: 8px; /* Space below text */
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Page header -->
+  <h1>ASSIGNMENT SUBMISSION</h1>
+  <h2>COSC 305</h2>
+
+  <!-- Submission form -->
+  <form id="form">
+    <!-- Name input -->
+    <label>Name</label>
+    <input id="name_field" type="text" placeholder="Your name">
+
+    <!-- Matric number input -->
+    <label>Matric Number</label>
+    <input id="number_field" type="text" placeholder="Your matric number">
+
+    <!-- Department input -->
+    <label>Department</label>
+    <input id="department_field" type="text" placeholder="Your department">
+
+    <!-- Email input -->
+    <label>Email</label>
+    <input id="email_field" type="text" placeholder="Your email">
+
+    <!-- Assignment answer input -->
+    <label>Assignment Answer</label>
+    <textarea id="assignment_field" placeholder="Your answer"></textarea>
+
+    <!-- Submit button -->
+    <button id="submitBtn" type="submit">Submit</button>
+  </form>
+
+  <!-- History box to show previous submissions -->
+  <div class="history">
+    <h3>Submitted Answers</h3>
+    <ul id="messageList"></ul>
+     <!-- List items populated via JavaScript -->
+  </div>
+
+  <script>
+    // Get form elements
+    const form = document.getElementById("form");
+    const nameField = document.getElementById("name_field");
+    const numberField = document.getElementById("number_field");
+    const departmentField = document.getElementById("department_field");
+    const emailField = document.getElementById("email_field");
+    const assignmentField = document.getElementById("assignment_field");
+    const btn = document.getElementById("submitBtn");
+    const messageList = document.getElementById("messageList");
+
+    function displayHistory() {
+      const history = JSON.parse(localStorage.getItem("history")) || [];
+      messageList.innerHTML = "";
+
+      history.forEach((item, index) => {
+        const li = document.createElement("li");
+
+        // Give the last entry a unique ID for Cypress
+        if(index === history.length - 1){
+          li.id = "latestEntry";
+        }
+      
+        li.innerHTML = `
+        <strong>${item.name}</strong><br>
+        Matric: ${item.number}<br>
+        Dept: ${item.department}<br>
+        Email: ${item.email}<br>
+        Answer: ${item.assignment}
+        `;
+        messageList.appendChild(li);
+      });
+    }
+
+
+    // Load history on page load
+    displayHistory();
+
+    // Handle form submission
+    btn.addEventListener("click", function(e) {
+      e.preventDefault(); // Prevent page reload
+
+      // Create entry object from form values
+      const entry = {
+        name: nameField.value,
+        number: numberField.value,
+        department: departmentField.value,
+        email: emailField.value,
+        assignment: assignmentField.value
+      };
+
+      // Get existing history or initialize empty array
+      const history = JSON.parse(localStorage.getItem("history")) || [];
+
+      // Add new entry to history
+      history.push(entry);
+
+      // Save updated history to localStorage
+      localStorage.setItem("history", JSON.stringify(history));
+
+      // Reset form fields
+      form.reset();
+
+      // Refresh displayed history
+      displayHistory();
+    });
+  </script>
+
+</body>
+</html>
